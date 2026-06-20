@@ -1,4 +1,4 @@
-name: Build BellApp V2 APK
+name: Build BellApp V3 APK
 
 on:
   workflow_dispatch:
@@ -2333,8 +2333,8 @@ jobs:
                   applicationId 'com.iljagrim.bellapp'
                   minSdk 23
                   targetSdk 35
-                  versionCode 3
-                  versionName '2.0'
+                  versionCode 4
+                  versionName '3.0'
               }
           }
           EOF
@@ -2444,10 +2444,21 @@ jobs:
               }
 
               public static int getSignalCount(Context context) {
+                  java.util.Calendar calendar = java.util.Calendar.getInstance();
+                  int minute = calendar.get(java.util.Calendar.MINUTE);
+                  int nearestQuarter = ((minute + 7) / 15) % 4;
+
+                  if (nearestQuarter == 1) return 1; // :15
+                  if (nearestQuarter == 2) return 2; // :30
+                  if (nearestQuarter == 3) return 3; // :45
+                  return 4; // :00
+              }
+
+              public static String getModeLabel(Context context) {
                   int minutes = getIntervalMinutes(context);
-                  if (minutes == 15) return 1;
-                  if (minutes == 30) return 2;
-                  return 3;
+                  if (minutes == 15) return "Every 15 min";
+                  if (minutes == 30) return "Every 30 min";
+                  return "Hour only";
               }
           }
           EOF
@@ -2619,17 +2630,14 @@ jobs:
                   if (manager == null) return;
 
                   boolean enabled = AppPrefs.isEnabled(context);
-                  int interval = AppPrefs.getIntervalMinutes(context);
-                  int count = AppPrefs.getSignalCount(context);
                   String status = enabled ? "Active" : "Paused";
-                  String next = enabled ? new SimpleDateFormat("HH:mm", Locale.getDefault())
-                          .format(new Date(AlarmScheduler.getNextAlignedTimeMillis(context))) : "not scheduled";
+                  String mode = AppPrefs.getModeLabel(context);
 
                   String restriction = getRestrictionText(context);
-                  String title = "BellApp " + status + " — every " + interval + " min";
+                  String title = "BellApp " + status;
                   String text = restriction.length() > 0
                           ? restriction
-                          : "Next: " + next + " • signals: " + count;
+                          : "Mode: " + mode;
 
                   Notification.Builder builder = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                           ? new Notification.Builder(context, CHANNEL_ID)
@@ -2810,13 +2818,13 @@ jobs:
                   root.setGravity(Gravity.CENTER_HORIZONTAL);
 
                   TextView title = new TextView(this);
-                  title.setText("BellApp V2");
+                  title.setText("BellApp V3");
                   title.setTextSize(30);
                   title.setTypeface(Typeface.DEFAULT_BOLD);
                   title.setGravity(Gravity.CENTER);
 
                   TextView subtitle = new TextView(this);
-                  subtitle.setText("15 min = 1 signal • 30 min = 2 • hour = 3");
+                  subtitle.setText("Quarter-hour chime clock");
                   subtitle.setTextSize(15);
                   subtitle.setGravity(Gravity.CENTER);
                   subtitle.setPadding(0, 10, 0, 20);
@@ -2837,9 +2845,9 @@ jobs:
 
                   intervalGroup = new RadioGroup(this);
                   intervalGroup.setOrientation(RadioGroup.VERTICAL);
-                  intervalGroup.addView(makeRadio("Every 15 minutes — 1 signal", 15));
-                  intervalGroup.addView(makeRadio("Every 30 minutes — 2 signals", 30));
-                  intervalGroup.addView(makeRadio("Every hour — 3 signals", 60));
+                  intervalGroup.addView(makeRadio("Hour only — 4 rings at :00", 60));
+                  intervalGroup.addView(makeRadio("Every 30 min — :00 = 4, :30 = 2", 30));
+                  intervalGroup.addView(makeRadio("Every 15 min — :15 = 1, :30 = 2, :45 = 3, :00 = 4", 15));
                   intervalGroup.setOnCheckedChangeListener((group, checkedId) -> {
                       AppPrefs.setIntervalMinutes(this, checkedId);
                       if (AppPrefs.isEnabled(this)) AlarmScheduler.scheduleNextAlarm(this);
@@ -3011,5 +3019,5 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bellapp-v2-debug-apk
+          name: bellapp-v3-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
