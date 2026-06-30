@@ -1,8 +1,9 @@
-# BELLAPP V6.2 — COPY THIS ENTIRE FILE INTO GITHUB
+# BELLAPP V6.2 — ONE COPY-PASTE GITHUB WORKFLOW
 # GitHub filename: .github/workflows/build-bellapp.yml
-# After committing: Actions → wait for green check → Releases → download app-debug.apk
+# This edition splits the embedded project across small run steps because
+# GitHub limits each jobs.<job>.steps[*].run command to 21,000 characters.
 
-name: Build BellApp V6.2 direct APK — expression fix
+name: Build BellApp V6.2 direct APK — chunked payload
 
 on:
   workflow_dispatch:
@@ -17,11 +18,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Reconstruct BellApp project
+      - name: Start embedded project file
         shell: bash
         run: |
           set -euo pipefail
-          cat > /tmp/bellapp.b64 <<'BELLAPP_PAYLOAD'
+          : > /tmp/bellapp.b64
+
+      - name: Add project payload 01 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_01'
           H4sICDTbQ2oC/2JlbGxhcHAtdjYyLWNvbXBhY3QudGFyAOx9B1xTyfP4SwghFAEFAQXlgShBICT0
           IpDQBKVJUawkQIBgSGISmlJCUbFi17Mgnr1jr0jsesqJ5QSxAGJvgBUVyP+9FEggIN59777f3/+S
           +5wkb3dnZ2dnZ2dmZ/bhbHA2xFBKuj+VEkdlA3/LBy/69PQXj7ez7/wOPyfgbQm2AJgO/AOfFA6X
@@ -117,6 +123,12 @@ jobs:
           0kAag0phB1IymCncnurAxrwIAdnkDWlZ0ZG80fFgVu+OS6/ASPjSDeH84NgJMVgC3g4yFZ2drUBb
           W3uLH7g9J/oGQmaJTHtbBweoKZxC7vjD5hP8AyI6exf+6uIzlYxZ2JY6nkJPgSxvdgpD/E3o/hJ/
           FyZaC7/L9ioivOhOBdF3K1Fuv+QHvPok30XRQZJfcMqtrb3kl/CuSckPYehC5w8mSzK/8lJk2Eyu
+          BELLAPP_CHUNK_01
+
+      - name: Add project payload 02 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_02'
           8Bo7SZaMt9CMwooYFeRQUqlxkks1hZckStsHnBQ41LGjjZzK0pq70CKRts86/b0B8cFUahw1TiZx
           Bl5DkTSsDIx4NpWTiO3L/aPcRFrnTXV9GnkYlQMHv8gboKRI1s7pnPfOe1S7oNjF2hL21DEwqY6k
           1xgIby9i81H6ufSQhNSAqgn9X2waJPFEdrF0fdjQigjwJgXKaRMKcRnsM7O1hRcUvJ6E7p/uFb0g
@@ -212,6 +224,12 @@ jobs:
           wkam3w0vnuqMolOj3+dGINvtv+S8X5X7fPWOltbH13lDzm5BXcFc0lqmgXUHBi5FIUzIpBOVpaUX
           nTFXTnijBvDP14aNEUzdfsqg1SNQgGh7f94sSy2TV7zIs3bU6SdLeaMWzp1qt5KnYgrWCDKWBTat
           YL6bVo06fbj6hY+bfV5b5ovdiN2FlxxdgguASi8I1aYUB+ZB5JmWPET1LptNswPfbX7pNCbF71DR
+          BELLAPP_CHUNK_02
+
+      - name: Add project payload 03 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_03'
           tqK6aDXdFpN9pPbzzQkh45pCXBHfXyAKkASy6bPzC1DIIqS36zfE4LP+j4GKstU6I5Yp69kty8N/
           X6NxdMrAqUvQmS934UL2VN1e/djGBE35lhbXlnt1Fr2VV7xeoGzuUfM841u/w543VZEa7obL1Xw0
           RzU6fl1tXoS4rjLwRdUmY7LZkmVk+ndw3yAzFAuIUlPe/cfRgMEtefP508reHhvF/ZSwYdP+ZsMP
@@ -307,6 +325,12 @@ jobs:
           fYs/cbXaORNt/KBZqClqiMdKa1AzU8wA1oBMSBn9dVeh3WPySUvy7icWZ4rpG7/W8g1e0MANqHr8
           SAtXUNkTNHGo/qLmtd+8+mCV6vq3oSrn3C/syk+8vWfCvAL2HwNYwZrxl/LsxxQHZ58KrQzg65Cm
           hTjfU4l1ofuVOVST3e9cwh7f/Efuywgd/GHLzY6q9guXGfHbNOsOttzVGYBaYYtJby9STT+7qNrG
+          BELLAPP_CHUNK_03
+
+      - name: Add project payload 04 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_04'
           RnWQ2WwWu3358qIvn/AGjov0BpRutScfG7NXh1ZqHgAElUTsdaq3ezUAsyQXhdhqpnyjdshsVLt+
           BhdHxuIDSq73q2df2qZNBfo/OrjVW3np1XzE1tzZUyaMdvDhDtfWRjxTstCM2KAcEf6RNWZ1632N
           CzW7ShDTUGXLSelLqR+cFmz99fD54AXEK3EsTz4uUqktJIhX2z9sJZ8x4ouuz5VPJ89FB73U2PB2
@@ -402,6 +426,12 @@ jobs:
           Aj/yP1bYglQeZNpLqxFznncI2DYjNWEWYG8v0miaPQkmVf4ZYgG3EE1Ux7iXkBGc8trJw3OTQvkp
           9XH6vdRvJVF24V1v/jKNOkptgQvSAdiFBZ06kwJGkMlO/KbxGT9J3c1HYxZ9ewS+y8XKBsEuXPOC
           Foi03N8TLFO14zv1lnlTDcesIZ4GUsP4gcrAy9DhOhElPFOIwFFgX4aC6O9cguCfvo+QMlAbv2+Q
+          BELLAPP_CHUNK_04
+
+      - name: Add project payload 05 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_05'
           0EGLFA0CFPLFwoSKceJ9aRdoyooYSxYglhT6kkNZgJ8hBxXgf/ryOgPk/HleTbBHZy7Mau2YOm9H
           pL/1zn6Mv7+/4jAmbpzcGRp+jQGEBD1EDna/sBaAdOBJXq4GRUJqF3cO/S4mdj99Niq5MbYneuTW
           Xp3SNfl3kBbI6KBF65gVkFCem1HqUe+REHhAeZNd/N2fUn9kLwhojzfvVVsj5+Gg1sUktdYYD6bI
@@ -497,6 +527,12 @@ jobs:
           +azDpKARRHK8UhwRdb0iomgQnQIAEahx7n4NcUYwC+NDpisgJxDJXuZDkffUszfLRA8OENeYziGM
           l7rpKBSa3hk9AXbuAYl7MgKPbOyu6Xl302oaIik79ZxvDnlPgMVckrJ+8Rwsy2yN2z2xv856J+5p
           yCfH3shME/9NvR/iP/4Em7pCuWJDCO3k1Nz5H4+tqIPufX5g9aYAeAvPhMGxjpYikQCIHwZZIyeK
+          BELLAPP_CHUNK_05
+
+      - name: Add project payload 06 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_06'
           JKNaqzSMpCThJ4eVUmK5AC6X4W5qvXTwsDIQf014+Dm7Hok8CBNt5CFOm0ysNST8QqtCXwg6lAVz
           D/+hPWfr3CsUP4a4AvILS6EdUfZY+QNWy14nm8tAv7oVFm+D56hMOpd5IsMrYf9EEL1L6F9mMtBe
           s7ycfUVBAf6w7aUapl6ubnlx85e8rvB5FOHP97u2V4piyj5eJxFoc68pkoQGSXV7qsHftF36roOM
@@ -592,6 +628,12 @@ jobs:
           2sKEbsXVNucn30yUSYlgCfKhg5sloaV15SsWAwab21cA+7LyeBpZVMUCxCj1NpFucsjbKQ1Q/viI
           +WCCqpLMueiRt3bhPdFHbQ+CqEE1JQtnzA1KlGLKTY4zijXlR3p0YnrcLPzKEHM3W9uBzq3nOZQA
           JbN+H4ORdvYrTOtllmWAy7jRl4DX86pw6HBRm/S731nUGRNVyeTGrGuNX2HQXIuMwYgHaXMnoh/+
+          BELLAPP_CHUNK_06
+
+      - name: Add project payload 07 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_07'
           U/roALrjQferfq7tX0/b9CtN5H/0RF2WbSYGycmEveNJYnjhWoABg2Tn6oBexpvqShEWTCYT9jBm
           xkGN7zoNlfEb6hF8mWFbyNa/3QEz9mk/yTF6EQWpn0u3aGKfVZVeBvRmU9H286ULHpY+aQ86Ez1r
           QXLypujiSIa370uvRGGl6KNRGo6bdSJkHFJ3kvEnltHOJ847BL2AdVWBJm3fZ8/o9+oTZPae1ID3
@@ -687,6 +729,12 @@ jobs:
           3R8fhHUgO7RB6pQdhEFbjHrthFcHvUCiMrRfgUI1/j1nL1JWXCgUW8BoNJr85ejWKRmk9zLrBByd
           TnvFVM37Guk7pLtY79GQBsfuPeM/12eJBz+mgIsY+0svHDAGyPORGB1xPREMBoKBQjF+ntdSHsmQ
           3ZdAVon5hOjo9EmoD6aUiFYxgWP7WQg458e+VMHMv6+SEXgxRLSWnn7BL5V3isNC1+o/tyzVcP8V
+          BELLAPP_CHUNK_07
+
+      - name: Add project payload 08 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_08'
           hTAEMo/vgnIhYXS2MT9q0DuhcuSQLwVy68RZS1U4AGcsTAVIEi3Gy1HvaUQ7QiMTIxC2bteF0L1f
           IZQrfnoRiVn7eZsO7WK/PImvu0JuqoK6Gi+zdKAeqjPYDbTNydMGTt0RhNSnpP5m1TY+kLskLd12
           p7TpooMabQEYczY4P8DG2RCLJLGAAThNm23a9wy99lY4IKol+UYDpbENYlc5nSLc62UqAXCkTCQe
@@ -782,6 +830,12 @@ jobs:
           0KzUJObO61Tm9VcmN9H+2o2YjjClKlPYpO18IPtyk3jxswtngkab+ygqfKg/4RLIaoCm/h/l4mpT
           OEe8bWTxKSscSUI34uCxPihuPKgAdQu1Xv81xo8rDmgDO/3wUIJpQ5/bqB3BNhZ1XL7vvA8Orqyp
           1mlKZ3z1WruJi/OuitBx22TZ80Kh0Bz+wPDrzal3DpufBZ0mCs2H6fMb7gTF349PvRR8clh50U2h
+          BELLAPP_CHUNK_08
+
+      - name: Add project payload 09 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_09'
           IRFAhLEC/svMJHtUWPVrEM5XdJBBHrVPjeGD2wyCgiRnHvLXDB44fR9gLEp8U8W1uUP8HX72vsTx
           lcvH8cn+gRd7JwHVChWji0XjdniKO8fzx3c+nRD/7RQoFHKuaFbfl7VisG2aTEge3bn2nahCiSQD
           ojFAXDGOG8JbF+pITqPOBB6kuhzvc2842gpRisYqtca81uwD2FvWRL/YeOo+9W16kyTB9W3GmdL1
@@ -877,6 +931,12 @@ jobs:
           HsyOtWw5VRGWXnWXjVBaa9Ah1IdycGDbIAjKcuO9n32xbN4+124MGorcKe8NWfpNJloTwNN/JsYv
           Q+T4mIKFpqvsvvLzlDHE1VrPkCMSCRU31V3f2ULl742ZrNHftnT/OrtzOBT1aL46+FXEzbvUc+2q
           ioCv5I7gR6aHW5tLnfvFA6bjVIGu+jlzDPYkv/Xi5r8EeU2LdSryj7SrMe1ksf99HWo3VAPpT0/t
+          BELLAPP_CHUNK_09
+
+      - name: Add project payload 10 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_10'
           IS9rRmvDMJ5VbpHXDZp5YbiIYeGEQJIEZG6GDg7JTerGWe3oC2i1av0hynC9/f7+UmhgoJHVe3IV
           FElXFwinj+aKHcAaKZKN0wzXSI3yKlLqW5CIpb9hWXn/5rNZ6EaJ4XPwyUYtfU/zcihNgn8fHqB5
           GC43U6j8leCBln0t09MSUl4sazQ+23hlZ5U6bvnHeEu969du/RH9WO7A8Xmhuc1EgCXgiWI/N1Tx
@@ -972,6 +1032,12 @@ jobs:
           x3LiRdeWN2ESR+ev3WX4ZXQjZEPoQKo8neQM+clBkD+yS0tedO45VFvtQvvij25q9e+4nNqMRANX
           xrgf06fSjezPzVVZiyX0sYRFosN71fQIGJRtXoUvacaJrLxS6YwH1bcyQek+l+Br8F5938/1Kh5f
           bJ2rV2LunhCAqtwxLWTYAu0vznOZQl2KwFZ70WUurG+0tZtHyJJA+mRVGPE1avhbfIhjVWfTLhii
+          BELLAPP_CHUNK_10
+
+      - name: Add project payload 11 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_11'
           2F7n5QzU+SiSIxZICy4tvXG/wRaS49rVaR7byx7sFF/F6xi0aKHqZPHkJU7c+RsaN/HIQG1UZ00O
           nZKHr5DOxEvKCJZZMmOUjI544pDHQ5qhHrEsxRPJLlNl/ME+ElmT9kb6sLLYbRfBbS0QUTnD7420
           ia9qY9tP+cnzU192yWIr797Ui+6jeaULBoEL1kOjKwY+8BcX8nTJ9hxv01Rrln3Pc9ZUX4uLlDpx
@@ -1067,6 +1133,12 @@ jobs:
           Al9DwJuoG5jWPkr97qoRr8cc82HEEZAnANnJQbb5uFjqiTtOHa3aADxpFIACh6yGj+ZZxgdiEDUb
           pPqQzM7HLvqzBWFpWfpJBuujFgMtgtehtOfr3QwoCvCQXqXd9lhOtqt/4/2HfpGZDXDMJ74166qo
           z83mj8qCGV33B/Aj4lqAipctS8s9Ni8J9+7SeTpmlpqXM7R6W/7ANG4glgpoiSKWkQbF0LU40IN4
+          BELLAPP_CHUNK_11
+
+      - name: Add project payload 12 of 12
+        shell: bash
+        run: |
+          cat >> /tmp/bellapp.b64 <<'BELLAPP_CHUNK_12'
           FKllEgCKWn7qdM9b1XSjk7z7hBr2Cka5DdEQZhS9ndf7DN2od5+QHdiq+vTTklMs8c3ClPhOdZdn
           MRMT5NylFzcoVwhcITLe38M/lPo1HWQpm7i8VV6p++h0P019jI0P1j2RW7VhkCY0iWt+K0nZEEd7
           ajluNHno1ySJwAC8vNUoyIlrS/oO/UcQFftQk4AbVEmRbLI9rkEEFnD1zs0luTw3C6IoH0z2rfX1
@@ -1101,10 +1173,16 @@ jobs:
           53Ube/r4/c+HoaeRAtAB4YXwcEB4wIOgp0NcpP9ZePEP78DA0wEhdtpSBaB/e1JTRUff1sjQ1hhq
           pKuhZmYL1TA2MhX8fzXh/C7PHrixj6crAu4ndjaaByuC+X+tgvADXTzgSH8HBJj/IuzsT6wfwYIF
           CxYsWLBgwYIFCxYsWLBgwYIFCxYsWLBgwYIFCxYsWLBgwYIFCxYsWLD8cfwf0/DxAQAwAgA=
-          BELLAPP_PAYLOAD
+          BELLAPP_CHUNK_12
+
+      - name: Decode and verify BellApp project
+        shell: bash
+        run: |
+          set -euo pipefail
           base64 --decode /tmp/bellapp.b64 > /tmp/bellapp.tar.gz
           echo "afe59681ef8592a1bff99d97505c795aba5bed9aa2255908957df62952a6d9c6  /tmp/bellapp.tar.gz" | sha256sum -c -
           tar -xzf /tmp/bellapp.tar.gz
+
       - name: Set repository URL
         shell: bash
         env:
@@ -1132,7 +1210,8 @@ jobs:
 
       - name: Build APK
         shell: bash
-        run: gradle :app:assembleDebug --stacktrace
+        run: |
+          gradle :app:assembleDebug --stacktrace
 
       - name: Publish direct APK
         shell: bash
