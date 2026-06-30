@@ -1,4 +1,4 @@
-name: Build BellApp V5 APK
+name: Build BellApp V6 APK
 
 on:
   workflow_dispatch:
@@ -6779,8 +6779,8 @@ jobs:
                   applicationId 'com.iljagrim.bellapp'
                   minSdk 23
                   targetSdk 35
-                  versionCode 6
-                  versionName '5.0-test'
+                  versionCode 7
+                  versionName '6.0-test'
               }
           }
           EOF
@@ -7342,7 +7342,7 @@ jobs:
                   controlRow.addView(startButton, weight(1)); controlRow.addView(stopButton, weight(1)); controlRow.addView(testButton, weight(1));
                   root.addView(controlRow, full());
           
-                  Button perm = action("Open Android settings"); perm.setOnClickListener(v -> openExactAlarmPermissionSettings()); root.addView(perm, full());
+                  Button perm = action("Alarm permission · Open Android settings"); perm.setOnClickListener(v -> openExactAlarmPermissionSettings()); root.addView(perm, full());
           
                   LinearLayout footer = row();
                   Button privacy = small("Privacy"); privacy.setOnClickListener(v -> startActivity(new Intent(this, PrivacyActivity.class)));
@@ -7350,7 +7350,7 @@ jobs:
                   Button code = small("Read code"); code.setOnClickListener(v -> openUrl("https://github.com/"));
                   footer.addView(privacy, weight(1)); footer.addView(github, weight(1)); footer.addView(code, weight(1));
                   root.addView(footer, full(0,4,0,0));
-                  TextView version = tv("Version 5.0", 11, false); version.setGravity(Gravity.CENTER); root.addView(version, full(0,0,0,0));
+                  TextView version = tv("Version 6.0 test", 11, false); version.setGravity(Gravity.CENTER); root.addView(version, full(0,0,0,0));
           
                   setContentView(root);
               }
@@ -7450,5 +7450,5 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bellapp-v5-debug-apk
+          name: bellapp-v6-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
