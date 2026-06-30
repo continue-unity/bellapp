@@ -3,7 +3,7 @@
 # This edition splits the embedded project across small run steps because
 # GitHub limits each jobs.<job>.steps[*].run command to 21,000 characters.
 
-name: Build BellApp V6.2 direct APK — chunked payload
+name: Build BellApp V6.2 direct APK — explicit Gradle fix
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Start embedded project file
@@ -1196,22 +1196,31 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          gradle-version: '8.10.2'
-          cache-provider: basic
-
-      - name: Ensure Android SDK 35
+      - name: Verify preinstalled Android SDK
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null 2>&1 || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          set -euo pipefail
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -d "$ANDROID_HOME/platforms/android-35"
+          test -d "$ANDROID_HOME/build-tools/35.0.0"
+          java -version
+
+      - name: Download verified Gradle 8.10.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3             https://services.gradle.org/distributions/gradle-8.10.2-bin.zip             -o /tmp/gradle-8.10.2-bin.zip
+          curl -fsSL --retry 3             https://services.gradle.org/distributions/gradle-8.10.2-bin.zip.sha256             -o /tmp/gradle-8.10.2-bin.zip.sha256
+          echo "$(cat /tmp/gradle-8.10.2-bin.zip.sha256)  /tmp/gradle-8.10.2-bin.zip" | sha256sum -c -
+          rm -rf /tmp/gradle-8.10.2
+          unzip -q /tmp/gradle-8.10.2-bin.zip -d /tmp
+          /tmp/gradle-8.10.2/bin/gradle --version
 
       - name: Build APK
         shell: bash
         run: |
-          gradle :app:assembleDebug --stacktrace
+          set -euo pipefail
+          /tmp/gradle-8.10.2/bin/gradle --no-daemon :app:assembleDebug --stacktrace
 
       - name: Publish direct APK
         shell: bash
