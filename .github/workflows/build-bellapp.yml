@@ -3,7 +3,7 @@
 # This edition splits the embedded project across small run steps because
 # GitHub limits each jobs.<job>.steps[*].run command to 21,000 characters.
 
-name: Build BellApp V6.2 direct APK — explicit Gradle fix
+name: Build BellApp V6.2 APK — Actions artifact plus direct Release
 
 on:
   workflow_dispatch:
@@ -1221,6 +1221,22 @@ jobs:
         run: |
           set -euo pipefail
           /tmp/gradle-8.10.2/bin/gradle --no-daemon :app:assembleDebug --stacktrace
+
+      - name: Verify APK exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f app/build/outputs/apk/debug/app-debug.apk
+          ls -lh app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload APK to this Actions run
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: BellApp-V6.2-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
 
       - name: Publish direct APK
         shell: bash
