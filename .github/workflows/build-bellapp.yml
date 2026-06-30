@@ -2,7 +2,7 @@
 # GitHub filename: .github/workflows/build-bellapp.yml
 # After committing: Actions → wait for green check → Releases → download app-debug.apk
 
-name: Build BellApp V6.2 direct APK
+name: Build BellApp V6.2 direct APK — expression fix
 
 on:
   workflow_dispatch:
@@ -1105,7 +1105,12 @@ jobs:
           base64 --decode /tmp/bellapp.b64 > /tmp/bellapp.tar.gz
           echo "afe59681ef8592a1bff99d97505c795aba5bed9aa2255908957df62952a6d9c6  /tmp/bellapp.tar.gz" | sha256sum -c -
           tar -xzf /tmp/bellapp.tar.gz
-          sed -i "s|__REPOSITORY_URL__|https://github.com/${{ github.repository }}|g" app/src/main/java/com/iljagrim/bellapp/MainActivity.java
+      - name: Set repository URL
+        shell: bash
+        env:
+          REPOSITORY_URL: https://github.com/${{ github.repository }}
+        run: |
+          sed -i "s|__REPOSITORY_URL__|$REPOSITORY_URL|g" app/src/main/java/com/iljagrim/bellapp/MainActivity.java
 
       - name: Set up Java 17
         uses: actions/setup-java@v5
